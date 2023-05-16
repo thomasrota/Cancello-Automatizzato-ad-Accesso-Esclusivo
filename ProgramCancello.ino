@@ -35,11 +35,18 @@
 #define LED_R_PARCHEGGIO_3 41
 #define LED_G_PARCHEGGIO_3 42
 #define RS 51
-#define E 52
+#define EN 52
 #define DB4 7
 #define DB5 8
 #define DB6 9
 #define DB7 10
+#define TRASMISSIONE_IMPRONTA 11
+#define RICEZIONE_IMPRONTA 12
+#define SENSORE_TEMPERATURA 13
+#define MOTOR_PIN_0 A8
+#define MOTOR_PIN_1 A9
+#define MOTOR_PIN_2 A10
+#define MOTOR_PIN_3 A11
 
 #define RIGHE 4
 #define COLONNE 4 
@@ -52,10 +59,10 @@ char tasti[RIGHE][COLONNE] = {
   {'*', '0', '#', 'D'}
 };
 Keypad tastierino = Keypad(makeKeymap(tasti), pinRighe, pinColonne, RIGHE, COLONNE);
-
+LiquidCrystal lcd (RS, EN, DB4, DB5, DB6, DB7);
 SoftwareSerial gsm(5, 6);
 
-#define DELAY_CHIUSURA 30000
+#define DELAY_CHIUSURA 15000
 
 void setup() {
   Serial.begin(9600);
