@@ -1,5 +1,6 @@
 #include <SoftwareSerial.h>
 #include <LiquidCrystal.h>
+#include <Stepper.h>
 
 #define FOTORESISTENZA_PARCHEGGIO_0 A0
 #define FOTORESISTENZA_PARCHEGGIO_1 A1
@@ -61,14 +62,60 @@ char tasti[RIGHE][COLONNE] = {
 Keypad tastierino = Keypad(makeKeymap(tasti), pinRighe, pinColonne, RIGHE, COLONNE);
 LiquidCrystal lcd (RS, EN, DB4, DB5, DB6, DB7);
 SoftwareSerial gsm(5, 6);
+Stepper myStepper(1024, MOTOR_PIN1, MOTOR_PIN2, MOTOR_PIN3, MOTOR_PIN4);
+
+int postiLiberi = 0;
+const int steps = 128;
 
 #define DELAY_CHIUSURA 15000
 
 void setup() {
   Serial.begin(9600);
   gsm.begin(9600);
+  pinMode(LAMPEGGIANTE, OUTPUT);
+  pinMode(FINE_CORSA_APERTURA, INPUT);
+  pinMode(FINE_CORSA_CHIUSURA, INPUT);
+  pinMode(APERTURA_INTERNO, INPUT);
+  pinMode(APERTURA_ESTERNO, INPUT);
+  pinMode(MOTOR_PIN1, OUTPUT);
+  pinMode(MOTOR_PIN2, OUTPUT);
+  pinMode(MOTOR_PIN3, OUTPUT);
+  pinMode(MOTOR_PIN4, OUTPUT);
+  myStepper.setSpeed(25);
+  //postiLiberi = ContaLiberi();
 }
 
 void loop() {
+  if(digitalRead(APERTURA_INTERNO) == HIGH){
+    AperturaCancello();
+    delay(2000); //possibilmente 20000
+    ChiusuraCancello();
+    postiLiberi++;
+  }
+  if(digitalRead(APERTURA_ESTERNO) == HIGH){
+    AperturaCancello();
+    delay(2000); //possibilmente 20000
+    ChiusuraCancello();
+    postiLiberi--;
+  }
+}
 
+void ContaLiberi(){
+  
+}
+
+void AperturaCancello(){
+  while(digitalRead(FINE_CORSA_APERTURA) == LOW){
+    myStepper.step(steps);
+    digitalWrite(LAMPEGGIANTE, !digitalRead(LAMPEGGIANTE));
+  }
+  digitalWrite(LAMPEGGIANTE, LOW);
+}
+
+void ChiusuraCancello(){
+  while(digitalRead(FINE_CORSA_CHIUSURA) == LOW){
+    myStepper.step(-steps);
+    digitalWrite(LAMPEGGIANTE, !digitalRead(LAMPEGGIANTE));
+  }
+  digitalWrite(LAMPEGGIANTE, LOW);
 }
