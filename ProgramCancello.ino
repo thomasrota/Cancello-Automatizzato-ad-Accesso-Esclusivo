@@ -44,10 +44,10 @@
 #define TRASMISSIONE_IMPRONTA 11
 #define RICEZIONE_IMPRONTA 12
 #define SENSORE_TEMPERATURA 13
-#define MOTOR_PIN_0 A8
-#define MOTOR_PIN_1 A9
-#define MOTOR_PIN_2 A10
-#define MOTOR_PIN_3 A11
+#define MOTOR_PIN0 A8
+#define MOTOR_PIN1 A9
+#define MOTOR_PIN2 A10
+#define MOTOR_PIN3 A11
 
 #define RIGHE 4
 #define COLONNE 4 
@@ -63,6 +63,7 @@ Keypad tastierino = Keypad(makeKeymap(tasti), pinRighe, pinColonne, RIGHE, COLON
 LiquidCrystal lcd (RS, EN, DB4, DB5, DB6, DB7);
 SoftwareSerial gsm(5, 6);
 Stepper myStepper(1024, MOTOR_PIN1, MOTOR_PIN2, MOTOR_PIN3, MOTOR_PIN4);
+DHT dht(SENSORE_TEMPERATURA, DHT11);
 
 int postiLiberi = 0;
 const int steps = 128;
@@ -92,12 +93,50 @@ void loop() {
     ChiusuraCancello();
     postiLiberi++;
   }
-  if(digitalRead(APERTURA_ESTERNO) == HIGH){
-    AperturaCancello();
-    delay(2000); //possibilmente 20000
-    ChiusuraCancello();
-    postiLiberi--;
+  if(digitalRead(APERTURA_TASTIERA) == HIGH){
+    if(VerificaPassword());
+    AperturaCancello();{
+      delay(2000); //possibilmente 20000
+      ChiusuraCancello();
+      postiLiberi--;
+    }
+    else{
+      lcd.clear();
+      lcd.print("Password");
+      lcd.setCursor(0,1);
+      lcd.print("Errata");
+      delay(2000);
+      ModificaLCD();
+    }
   }
+  if(digitalRead(APERTURA_IMPRONTA) == HIGH){
+    if(VerificaImpronta());
+    AperturaCancello();{
+      delay(2000); //possibilmente 20000
+      ChiusuraCancello();
+      postiLiberi--;
+    }
+    else{
+      lcd.clear();
+      lcd.print("Impronta");
+      lcd.setCursor(0,1);
+      lcd.print("Non trovata");
+      delay(2000);
+      ModificaLCD();
+    }
+  }
+}
+
+void ModificaLCD(){
+  
+}
+
+bool VerificaPassword(){
+
+}
+
+bool VerificaImpronta(){
+
 }
 
 void ContaLiberi(){
