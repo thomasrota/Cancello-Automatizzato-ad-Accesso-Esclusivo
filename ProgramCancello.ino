@@ -53,17 +53,28 @@
 #define COLONNE 4 
 byte pinRighe[RIGHE] = { 50, 49, 48, 47};
 byte pinColonne[COLONNE] = { 46, 45, 44, 43};
-char tasti[RIGHE][COLONNE] = {
-  {'1', '2', '3', 'A'},
-  {'4', '5', '6', 'B'},
-  {'7', '8', '9', 'C'},
-  {'*', '0', '#', 'D'}
-};
+char tasti[RIGHE][COLONNE] = {{'1', '2', '3', 'A'},{'4', '5', '6', 'B'},{'7', '8', '9', 'C'},{'*', '0', '#', 'D'}};
 Keypad tastierino = Keypad(makeKeymap(tasti), pinRighe, pinColonne, RIGHE, COLONNE);
 LiquidCrystal lcd (RS, EN, DB4, DB5, DB6, DB7);
-SoftwareSerial gsm(5, 6);
+SoftwareSerial gsm(TRASMISSIONE_GSM, RICEZIONE_GSM);
 Stepper myStepper(1024, MOTOR_PIN1, MOTOR_PIN2, MOTOR_PIN3, MOTOR_PIN4);
 DHT dht(SENSORE_TEMPERATURA, DHT11);
+SoftwareSerial fingerSerial(TRASMISSIONE_IMPRONTA, RICEZIONE_IMPRONTA);
+
+const byte PASSWORDLENGTH = 7;
+char password[PASSWORDLENGTH] = "123456";
+char data[PASSWORDLENGTH];
+
+struct Persona
+{
+  char[] nome;
+  char[] password;
+  char[] telefono;
+  int idImpronta;
+};
+
+Persona Ferrari; Ferrari.nome = "Michele"; Ferrari.password = "20190"; Ferrari.telefono = "+393382831487";Ferrari.idImpronta = 1;
+Persona Rota; Rota.nome = "Thomas"; Thomas.password = "20196"; Rota.telefono = "+393396773542"; Thomas.idImpronta = 1;
 
 int postiLiberi = 0;
 const int steps = 128;
@@ -94,8 +105,10 @@ void loop() {
     postiLiberi++;
   }
   if(digitalRead(APERTURA_TASTIERA) == HIGH){
-    if(VerificaPassword());
-    AperturaCancello();{
+    int persona = VerificaPassword()
+    if(persona != -1);{
+      MessaggioBenvenuto(persona);
+      AperturaCancello();
       delay(2000); //possibilmente 20000
       ChiusuraCancello();
       postiLiberi--;
@@ -110,8 +123,10 @@ void loop() {
     }
   }
   if(digitalRead(APERTURA_IMPRONTA) == HIGH){
-    if(VerificaImpronta());
-    AperturaCancello();{
+    int persona = VerificaImpronta()
+    if(persona != -1);{
+      MessaggioBenvenuto(persona);
+      AperturaCancello();
       delay(2000); //possibilmente 20000
       ChiusuraCancello();
       postiLiberi--;
@@ -127,16 +142,40 @@ void loop() {
   }
 }
 
+void MessaggioBenvenuto(int persona){
+
+}
+
 void ModificaLCD(){
-  
+
 }
 
 bool VerificaPassword(){
-
+  while (counter < PASSWORDLENGTH)
+  char customKey = customKeypad.getKey();
+  if (customKey)
+  {
+  	data[counter] = customKey;
+    counter++;
+    if(counter==PASSWORDLENGTH-1)
+    {
+    	if(!strcmp(data,password))
+    	{
+        return id
+    	}
+    }
+  }
+  return -1;
 }
 
-bool VerificaImpronta(){
-
+int VerificaImpronta(){
+  uint8_t p = finger.getImage();
+  if (p != FINGERPRINT_OK)  return -1;
+  p = finger.image2Tz();
+  if (p != FINGERPRINT_OK)  return -1;
+  p = finger.fingerFastSearch();
+  if (p != FINGERPRINT_OK)  return -1;
+  return finger.fingerID;
 }
 
 void ContaLiberi(){
