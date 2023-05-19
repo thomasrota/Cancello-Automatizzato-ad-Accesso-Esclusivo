@@ -73,8 +73,10 @@ struct Persona
   int idImpronta;
 };
 
-Persona Ferrari; Ferrari.nome = "Michele"; Ferrari.password = "20190"; Ferrari.telefono = "+393382831487";Ferrari.idImpronta = 1;
-Persona Rota; Rota.nome = "Thomas"; Thomas.password = "20196"; Rota.telefono = "+393396773542"; Thomas.idImpronta = 1;
+Persona[] persone;
+
+persone[0].nome = "Michele"; persone[0].password = "20190"; persone[0].telefono = "+393382831487"; persone[0].idImpronta = 1;
+persone[1].nome = "Thomas"; persone[1].password = "20196"; persone[1].telefono = "+393396773542"; persone[1].idImpronta = 2;
 
 int postiLiberi = 0;
 const int steps = 128;
@@ -151,22 +153,23 @@ void ModificaLCD(){
 }
 
 bool VerificaPassword(){
-  while (counter < PASSWORDLENGTH)
-  char customKey = customKeypad.getKey();
-  if (customKey)
-  {
-  	data[counter] = customKey;
-    counter++;
-    if(counter==PASSWORDLENGTH-1)
+  int counter = 0;
+  while (counter < PASSWORDLENGTH){
+    char customKey = customKeypad.getKey();
+    if (customKey)
     {
-    	if(!strcmp(data,password))
-    	{
-        return id
-    	}
+  	  data[counter] = customKey;
+      counter++;
+    }
+  }
+  for (int i = 0; i < persone.size(); i++{
+    if(!strcmp(data,persone[i].password))
+    {
+    return persone[i].idImpronta;
     }
   }
   return -1;
-}
+  }
 
 int VerificaImpronta(){
   uint8_t p = finger.getImage();
