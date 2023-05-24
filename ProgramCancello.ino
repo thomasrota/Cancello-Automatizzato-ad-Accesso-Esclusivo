@@ -151,10 +151,8 @@ int VerificaPassword(){
     do{
       passwordInserita[i] = tastierino.getKey();
     }while(passwordInserita[i] < 48 || passwordInserita[i] > 57);
-    Serial.println(passwordInserita[i]);
   }
   passwordInserita[5] = '\0';
-  Serial.println(passwordInserita);
   for (int i = 0; i < numeroPersone; i++){
       if (strcmp(passwordInserita, persone[i].password) == 0)
         return persone[i].idImpronta;
