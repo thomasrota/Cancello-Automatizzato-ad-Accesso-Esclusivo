@@ -2,6 +2,8 @@
 #include <LiquidCrystal.h>
 #include <Stepper.h>
 
+ //+CLIP: "
+
 #define FOTORESISTENZA_PARCHEGGIO_0 A0
 #define FOTORESISTENZA_PARCHEGGIO_1 A1
 #define FOTORESISTENZA_PARCHEGGIO_2 A2
