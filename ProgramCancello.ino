@@ -61,10 +61,7 @@ Stepper myStepper(1024, MOTOR_PIN1, MOTOR_PIN2, MOTOR_PIN3, MOTOR_PIN4);
 DHT dht(SENSORE_TEMPERATURA, DHT11);
 SoftwareSerial fingerSerial(TRASMISSIONE_IMPRONTA, RICEZIONE_IMPRONTA);
 
-const byte PASSWORDLENGTH = 7;
-char password[PASSWORDLENGTH] = "123456";
-char data[PASSWORDLENGTH];
-
+const int numeroPersone = 2;
 struct Persona
 {
   char[] nome;
@@ -72,11 +69,7 @@ struct Persona
   char[] telefono;
   int idImpronta;
 };
-
-Persona[] persone;
-
-persone[0].nome = "Michele"; persone[0].password = "20190"; persone[0].telefono = "+393382831487"; persone[0].idImpronta = 1;
-persone[1].nome = "Thomas"; persone[1].password = "20196"; persone[1].telefono = "+393396773542"; persone[1].idImpronta = 2;
+Persona persone[2] = {{"Michele", "20190", "+393382831487", 1},{"Thomas", "20196", "+393396773542", 2}};
 
 int postiLiberi = 0;
 const int steps = 128;
@@ -152,24 +145,22 @@ void ModificaLCD(){
 
 }
 
-bool VerificaPassword(){
-  int counter = 0;
-  while (counter < PASSWORDLENGTH){
-    char customKey = customKeypad.getKey();
-    if (customKey)
-    {
-  	  data[counter] = customKey;
-      counter++;
-    }
+int VerificaPassword(){
+  char passwordInserita[6];
+  for (int i = 0; i < 5; i++){
+    do{
+      passwordInserita[i] = tastierino.getKey();
+    }while(passwordInserita[i] < 48 || passwordInserita[i] > 57);
+    Serial.println(passwordInserita[i]);
   }
-  for (int i = 0; i < persone.size(); i++{
-    if(!strcmp(data,persone[i].password))
-    {
-    return persone[i].idImpronta;
-    }
+  passwordInserita[5] = '\0';
+  Serial.println(passwordInserita);
+  for (int i = 0; i < numeroPersone; i++){
+      if (strcmp(passwordInserita, persone[i].password) == 0)
+        return persone[i].idImpronta;
   }
   return -1;
-  }
+}
 
 int VerificaImpronta(){
   uint8_t p = finger.getImage();
