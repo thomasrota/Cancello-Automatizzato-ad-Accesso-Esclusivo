@@ -71,7 +71,7 @@ struct Persona
   char[] telefono;
   int idImpronta;
 };
-Persona persone[2] = {{"Michele", "20190", "+393382831487", 1},{"Thomas", "20196", "+393396773542", 2}};
+Persona persone[numeroPersone] = {{"Michele", "20190", "+393382831487", 1},{"Thomas", "20196", "+393396773542", 2}};
 
 int postiLiberi = 0;
 const int steps = 128;
