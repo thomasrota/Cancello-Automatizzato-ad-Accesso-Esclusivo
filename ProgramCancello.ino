@@ -138,6 +138,14 @@ void loop() {
       ModificaLCD();
     }
   }
+  if(postiLiberi <= 0){
+    digitalWrite(SEMAFORO_R, HIGH);
+    digitalWrite(SEMAFORO_G, LOW);
+  }
+  else{
+    digitalWrite(SEMAFORO_R, LOW);
+    digitalWrite(SEMAFORO_G, HIGH);
+  }
 }
 
 void MessaggioBenvenuto(int persona){
