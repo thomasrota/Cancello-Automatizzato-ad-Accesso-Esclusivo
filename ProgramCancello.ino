@@ -1,6 +1,7 @@
 #include <SoftwareSerial.h>
 #include <LiquidCrystal.h>
 #include <Stepper.h>
+#include <DHT.h>
 
  //+CLIP: "
 
@@ -80,6 +81,7 @@ const int steps = 128;
 void setup() {
   Serial.begin(9600);
   gsm.begin(9600);
+  dht.begin();
   pinMode(LAMPEGGIANTE, OUTPUT);
   pinMode(FINE_CORSA_APERTURA, INPUT);
   pinMode(FINE_CORSA_CHIUSURA, INPUT);
@@ -173,6 +175,11 @@ int VerificaImpronta(){
 
 void ContaLiberi(){
   
+}
+
+int Temperatura(){
+  int t = dht.readTemperature();
+  return t;
 }
 
 void AperturaCancello(){
