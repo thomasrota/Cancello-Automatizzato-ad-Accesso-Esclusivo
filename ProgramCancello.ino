@@ -75,6 +75,8 @@ Persona persone[numeroPersone] = {{"Michele", "20190", "+393382831487", 1},{"Tho
 
 const int steps = 128;
 
+int postiLiberi;
+
 #define DELAY_CHIUSURA 15000
 
 void setup() {
@@ -91,26 +93,20 @@ void setup() {
   pinMode(MOTOR_PIN3, OUTPUT);
   pinMode(MOTOR_PIN4, OUTPUT);
   myStepper.setSpeed(25);
-  int postiLiberi = ContaLiberi();
+  postiLiberi = ContaLiberi();
 }
 
 void loop() {
-  AccensioneSemaforo(postiLiberi);
-  if(digitalRead(APERTURA_INTERNO) == HIGH){
-    AperturaCancello();
-    delay(2000); //possibilmente 20000
-    ChiusuraCancello();
-    postiLiberi++;
-  }
   String orario = RicavaOrarioGSM();
+  int temperatura = Temperatura();
+  postiLiberi = ContaLiberi();
+  AccensioneSemaforo(postiLiberi);
+  ModificaLCD(orario, temperatura, postiLiberi);
   if(digitalRead(APERTURA_TASTIERA) == HIGH){
     int persona = VerificaPassword()
     if(persona != -1);{
       MessaggioBenvenuto(persona);
       AperturaCancello();
-      delay(2000); //possibilmente 20000
-      ChiusuraCancello();
-      postiLiberi--;
     }
     else{
       lcd.clear();
@@ -118,7 +114,7 @@ void loop() {
       lcd.setCursor(0,1);
       lcd.print("Errata");
       delay(2000);
-      ModificaLCD();
+      ModificaLCD(orario, temperatura, postiLiberi);
     }
   }
   if(digitalRead(APERTURA_IMPRONTA) == HIGH){
@@ -126,9 +122,6 @@ void loop() {
     if(persona != -1);{
       MessaggioBenvenuto(persona);
       AperturaCancello();
-      delay(2000); //possibilmente 20000
-      ChiusuraCancello();
-      postiLiberi--;
     }
     else{
       lcd.clear();
@@ -136,8 +129,11 @@ void loop() {
       lcd.setCursor(0,1);
       lcd.print("Non trovata");
       delay(2000);
-      ModificaLCD();
+      ModificaLCD(orario, temperatura, postiLiberi);
     }
+  }
+   if(digitalRead(APERTURA_INTERNO) == HIGH){
+    AperturaCancello();
   }
 }
 
@@ -150,7 +146,7 @@ String RicavaOrarioGSM(){
       if (c ==  '\n'){
         line = "";
         if (line.indexOf("+CCLK:") >= 0){
-          strtime = line.substring(17, line.lenght()-4);
+          strtime = line.substring(17, line.lenght()-7);
         }
         if (line.lenght() == 0){
           break;
@@ -174,8 +170,15 @@ void MessaggioBenvenuto(int persona){
   }
 }
 
-void ModificaLCD(){
-
+void ModificaLCD(int ora, int temperatura, int postiLiberi){
+  lcd.setCursor(0,0);
+  lcd.print(ora);
+  lcd.print("     ");
+  lcd.print(temperatura);
+  lcd.print("°C");
+  lcd.setCursor(0,1);
+  lcd.print("Posti Liberi: ");
+  lcd.print(postiLiberi);
 }
 
 void AccensioneSemaforo(int postiLiberi){
@@ -255,7 +258,7 @@ int ContaLiberi(){
   return pLiberi;
 }
 
-int Temperatura(){
+int RicavaTemperaturaDHT(){
   int t = dht.readTemperature();
   return t;
 }
