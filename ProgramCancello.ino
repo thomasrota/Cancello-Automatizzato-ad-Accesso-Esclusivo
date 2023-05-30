@@ -50,6 +50,7 @@
 #define MOTOR_PIN1 A9
 #define MOTOR_PIN2 A10
 #define MOTOR_PIN3 A11
+#define SOGLIA 120
 
 #define RIGHE 4
 #define COLONNE 4 
@@ -219,7 +220,7 @@ int VerificaImpronta(){
 
 int ContaLiberi(){
   int pLiberi = 0;
-  if (analogRead(FOTORESISTENZA_PARCHEGGIO_0) > SOGLIA){
+  if (analogRead(FOTORESISTENZA_PARCHEGGIO_0) < SOGLIA){
     pLiberi++;
     digitalWrite(LED_G_PARCHEGGIO_0, HIGH);
     digitalWrite(LED_R_PARCHEGGIO_0, LOW);
@@ -228,7 +229,7 @@ int ContaLiberi(){
     digitalWrite(LED_G_PARCHEGGIO_0, LOW);
     digitalWrite(LED_R_PARCHEGGIO_0, HIGH);
   }
-  if (analogRead(FOTORESISTENZA_PARCHEGGIO_1) > SOGLIA){
+  if (analogRead(FOTORESISTENZA_PARCHEGGIO_1) < SOGLIA){
     pLiberi++;
     digitalWrite(LED_G_PARCHEGGIO_1, HIGH);
     digitalWrite(LED_R_PARCHEGGIO_1, LOW);
@@ -237,7 +238,7 @@ int ContaLiberi(){
     digitalWrite(LED_G_PARCHEGGIO_1, LOW);
     digitalWrite(LED_R_PARCHEGGIO_1, HIGH);
   }
-  if (analogRead(FOTORESISTENZA_PARCHEGGIO_2) > SOGLIA){
+  if (analogRead(FOTORESISTENZA_PARCHEGGIO_2) < SOGLIA){
     pLiberi++;
     digitalWrite(LED_G_PARCHEGGIO_2, HIGH);
     digitalWrite(LED_R_PARCHEGGIO_2, LOW);
@@ -246,7 +247,7 @@ int ContaLiberi(){
     digitalWrite(LED_G_PARCHEGGIO_2, LOW);
     digitalWrite(LED_R_PARCHEGGIO_2, HIGH);
   }
-    if (analogRead(FOTORESISTENZA_PARCHEGGIO_3) > SOGLIA){
+    if (analogRead(FOTORESISTENZA_PARCHEGGIO_3) < SOGLIA){
     pLiberi++;
     digitalWrite(LED_G_PARCHEGGIO_3, HIGH);
     digitalWrite(LED_R_PARCHEGGIO_3, LOW);
