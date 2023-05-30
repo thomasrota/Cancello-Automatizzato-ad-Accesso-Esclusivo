@@ -73,7 +73,6 @@ struct Persona
 };
 Persona persone[numeroPersone] = {{"Michele", "20190", "+393382831487", 1},{"Thomas", "20196", "+393396773542", 2}};
 
-int postiLiberi = 0;
 const int steps = 128;
 
 #define DELAY_CHIUSURA 15000
@@ -92,10 +91,11 @@ void setup() {
   pinMode(MOTOR_PIN3, OUTPUT);
   pinMode(MOTOR_PIN4, OUTPUT);
   myStepper.setSpeed(25);
-  //postiLiberi = ContaLiberi();
+  int postiLiberi = ContaLiberi();
 }
 
 void loop() {
+  AccensioneSemaforo(postiLiberi);
   if(digitalRead(APERTURA_INTERNO) == HIGH){
     AperturaCancello();
     delay(2000); //possibilmente 20000
@@ -138,14 +138,6 @@ void loop() {
       ModificaLCD();
     }
   }
-  if(postiLiberi <= 0){
-    digitalWrite(SEMAFORO_R, HIGH);
-    digitalWrite(SEMAFORO_G, LOW);
-  }
-  else{
-    digitalWrite(SEMAFORO_R, LOW);
-    digitalWrite(SEMAFORO_G, HIGH);
-  }
 }
 
 void MessaggioBenvenuto(int persona){
@@ -154,6 +146,17 @@ void MessaggioBenvenuto(int persona){
 
 void ModificaLCD(){
 
+}
+
+void AccensioneSemaforo(int postiLiberi){
+  if(postiLiberi <= 0){
+    digitalWrite(SEMAFORO_R, HIGH);
+    digitalWrite(SEMAFORO_G, LOW);
+  }
+  else{
+    digitalWrite(SEMAFORO_R, LOW);
+    digitalWrite(SEMAFORO_G, HIGH);
+  }
 }
 
 int VerificaPassword(){
