@@ -301,6 +301,8 @@ void Chiusura(){
     digitalWrite(LAMPEGGIANTE, !digitalRead(LAMPEGGIANTE));
   }
   digitalWrite(LAMPEGGIANTE, LOW);
+  digitalWrite(LASER_INTERNO, LOW);
+  digitalWrite(LASER_ESTERNO, LOW);
   if (!chiusura){
     AperturaCancello();
     Chiusura();
