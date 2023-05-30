@@ -181,8 +181,45 @@ int VerificaImpronta(){
   return finger.fingerID;
 }
 
-void ContaLiberi(){
-  
+int ContaLiberi(){
+  int pLiberi = 0;
+  if (analogRead(FOTORESISTENZA_PARCHEGGIO_0) > SOGLIA){
+    pLiberi++;
+    digitalWrite(LED_G_PARCHEGGIO_0, HIGH);
+    digitalWrite(LED_R_PARCHEGGIO_0, LOW);
+  }
+  else{
+    digitalWrite(LED_G_PARCHEGGIO_0, LOW);
+    digitalWrite(LED_R_PARCHEGGIO_0, HIGH);
+  }
+  if (analogRead(FOTORESISTENZA_PARCHEGGIO_1) > SOGLIA){
+    pLiberi++;
+    digitalWrite(LED_G_PARCHEGGIO_1, HIGH);
+    digitalWrite(LED_R_PARCHEGGIO_1, LOW);
+  }
+  else{
+    digitalWrite(LED_G_PARCHEGGIO_1, LOW);
+    digitalWrite(LED_R_PARCHEGGIO_1, HIGH);
+  }
+  if (analogRead(FOTORESISTENZA_PARCHEGGIO_2) > SOGLIA){
+    pLiberi++;
+    digitalWrite(LED_G_PARCHEGGIO_2, HIGH);
+    digitalWrite(LED_R_PARCHEGGIO_2, LOW);
+  }
+  else{
+    digitalWrite(LED_G_PARCHEGGIO_2, LOW);
+    digitalWrite(LED_R_PARCHEGGIO_2, HIGH);
+  }
+    if (analogRead(FOTORESISTENZA_PARCHEGGIO_3) > SOGLIA){
+    pLiberi++;
+    digitalWrite(LED_G_PARCHEGGIO_3, HIGH);
+    digitalWrite(LED_R_PARCHEGGIO_3, LOW);
+  }
+  else{
+    digitalWrite(LED_G_PARCHEGGIO_3, LOW);
+    digitalWrite(LED_R_PARCHEGGIO_3, HIGH);
+  }
+  return pLiberi;
 }
 
 int Temperatura(){
