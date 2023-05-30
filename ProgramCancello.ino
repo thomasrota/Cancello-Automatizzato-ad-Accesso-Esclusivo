@@ -102,6 +102,7 @@ void loop() {
     ChiusuraCancello();
     postiLiberi++;
   }
+  String orario = RicavaOrarioGSM();
   if(digitalRead(APERTURA_TASTIERA) == HIGH){
     int persona = VerificaPassword()
     if(persona != -1);{
@@ -138,6 +139,28 @@ void loop() {
       ModificaLCD();
     }
   }
+}
+
+String RicavaOrarioGSM(){
+  gsm.print("AT+CCLK?");
+  String line = "";
+  while(true){
+    if(gsm.available()){
+      char c = gsm.read();
+      if (c ==  '\n'){
+        line = "";
+        if (line.indexOf("+CCLK:") >= 0){
+          strtime = line.substring(17, line.lenght()-4)
+        }
+        if (line.lenght() == 0){
+          break;
+        }
+      }else if (c != '\r'){
+        line += c;
+      }
+    }
+  }
+  return line;
 }
 
 void MessaggioBenvenuto(int persona){
