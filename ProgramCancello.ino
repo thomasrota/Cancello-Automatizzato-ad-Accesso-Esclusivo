@@ -150,7 +150,7 @@ String RicavaOrarioGSM(){
       if (c ==  '\n'){
         line = "";
         if (line.indexOf("+CCLK:") >= 0){
-          strtime = line.substring(17, line.lenght()-4)
+          strtime = line.substring(17, line.lenght()-4);
         }
         if (line.lenght() == 0){
           break;
@@ -164,7 +164,14 @@ String RicavaOrarioGSM(){
 }
 
 void MessaggioBenvenuto(int persona){
-
+   for (int i = 0; i < numeroPersone; i++){
+      if (persona == persone[i].idImpronta){
+        lcd.setCursor(0, 0);
+        lcd.print("Benvenuto/a");
+        lcd.serCursor(persone[i].nome);
+        break;
+      }
+  }
 }
 
 void ModificaLCD(){
