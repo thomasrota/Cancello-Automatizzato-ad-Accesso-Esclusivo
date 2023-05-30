@@ -287,10 +287,22 @@ void AperturaCancello(){
   digitalWrite(LAMPEGGIANTE, LOW);
 }
 
-void ChiusuraCancello(){
+void Chiusura(){
+  delay(DELAY_CHIUSURA);
+  bool chiusura = true;
+  digitalWrite(LASER_INTERNO, HIGH);
+  digitalWrite(LASER_ESTERNO, HIGH);
   while(digitalRead(FINE_CORSA_CHIUSURA) == LOW){
+    if (analogRead(FOTORESISTENZA_INTERNO) > SOGLIA || analogRead(FOTORESISTENZA_ESTERNO) > SOGLIA){
+      chiusura = false;
+      break;
+    }
     myStepper.step(-steps);
     digitalWrite(LAMPEGGIANTE, !digitalRead(LAMPEGGIANTE));
   }
   digitalWrite(LAMPEGGIANTE, LOW);
+  if (!chiusura){
+    AperturaCancello();
+    Chiusura();
+  }
 }
